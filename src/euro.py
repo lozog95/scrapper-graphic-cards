@@ -26,6 +26,7 @@ class EuroGCSpider(scrapy.Spider):
             yield {
                 'price': self._cleanup_price(unicodedata.normalize('NFKC', unescape(card.css('div.price-normal::text').get()))),
                 'card': self._cleanup_name(unicodedata.normalize('NFKC', unescape(card.css('span.attribute-value::text').get()))),
+                'link': "https://euro.com.pl"+card.css('a.js-save-keyword::attr("href")').get()
             }
         
 
