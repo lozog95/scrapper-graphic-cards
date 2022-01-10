@@ -33,6 +33,15 @@ textarea {
     max-width: 280px;
 }
 
+.jumbotron {
+    color: #eee;
+    background-image: url('app/static/app/content/header.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: #000;
+}
+
 /* styles for validation helpers */
 .field-validation-error {
     color: #b94a48;
