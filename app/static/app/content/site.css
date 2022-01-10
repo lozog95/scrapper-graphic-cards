@@ -10,10 +10,11 @@
 }  
     */
 .inner-div {
-    padding: 5px;  
+    padding: 5px 15px 5px 15px;  
     -webkit-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
     -moz-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
     box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
+    margin: 
 }
 .col-md-3 {
     /*background-color: #525252;*/
