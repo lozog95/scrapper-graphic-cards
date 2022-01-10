@@ -35,7 +35,7 @@ textarea {
 
 .jumbotron {
     color: #eee;
-    background-image: url('app/static/app/content/header.jpg');
+    background-image: url(https://www.telepolis.pl/images/2022/01/RTX-3080-12-GB.jpg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: right;
