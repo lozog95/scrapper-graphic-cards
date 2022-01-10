@@ -1,6 +1,24 @@
-body {
+/*body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #333;
+    color: #b1b1b1;
+}
+
+.btn-default {
+
+}
+    */
+.col-md-3 {
+    /*background-color: #525252;*/
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-top: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+    -webkit-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
+    box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
 }
 
 /* Set padding to keep content from hitting the edges */

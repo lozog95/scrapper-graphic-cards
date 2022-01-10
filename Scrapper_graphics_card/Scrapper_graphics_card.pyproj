@@ -60,7 +60,9 @@
     <Folder Include="Scrapper_graphics_card\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\templates\app\rtx3060.html" />
+    <Content Include="app\templates\app\choice_template.html" />
+    <Content Include="app\templates\app\rtx3060ti.html" />
+    <Content Include="app\templates\app\result_template.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

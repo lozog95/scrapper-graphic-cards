@@ -9,19 +9,23 @@ from twisted.internet import reactor
 import scrapy
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
+import crochet
+#crochet.setup()
 
-runner = CrawlerRunner()
 
 class EuroGCSpider(scrapy.Spider):
     custom_settings = {
         'FEED_FORMAT': 'json',
-        'FEED_URI': 'app/output.json'
+        'FEED_URI': 'app/euro_output.json'
     }
     name = 'euro_spider'
-    start_urls = [
-        'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml',
-    ]
-
+    #retriving URL parsed as argument to this spider
+    def __init__(self, *args, **kwargs): 
+      super(EuroGCSpider, self).__init__(*args, **kwargs) 
+      self.start_urls = [kwargs.get('start_url')]
+      print(self.start_urls)
+    
+    #this function cleans price from weird characters scraped
     def _cleanup_price(self, price):
         price=price.strip()
         price=price.replace('\t', '')
@@ -29,10 +33,12 @@ class EuroGCSpider(scrapy.Spider):
         price=price.replace(' ', '')
         return price
 
+    #and same story for name
     def _cleanup_name(self, name):
         name = name.lstrip("karta graficzna ")
         return name
 
+    #finaly parsing the response and retrieving attributes
     def parse(self, response):
         for card in response.css('div.product-for-list'):
             yield {
@@ -47,17 +53,12 @@ class EuroGCSpider(scrapy.Spider):
             yield response.follow(next_page, self.parse)
 
 
-def start_scraper(url):
-    #dirty workaround for now
-    if os.path.exists("app/output.json"):
-        os.remove("app/output.json")
+def start_scraper(given_url):
+    
+    #crochet used to run spider from script of non main thread
+    crochet.setup()
 
-    #running spider, arachnophobia alert
-    d = runner.crawl(EuroGCSpider)
-    d.addBoth(lambda _: reactor.stop())
-    reactor.run()
+    #running spider, arachnophobia alert (!)
+    runner = CrawlerRunner()
+    d = runner.crawl(EuroGCSpider,start_url=given_url)
 
-
-    with open("app/output.json") as w:
-        output = json.loads(w.read())
-    return output

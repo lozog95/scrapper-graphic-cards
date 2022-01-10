@@ -1,0 +1,37 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1>{{ title }}</h1>
+
+</div>
+
+<div class="row">
+    {% if item_list|length > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nazwa modelu:</th>
+                <th scope="col">Cena:</th>
+                <th scope="col">Link:</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% endif %}
+            {% if item_list|length > 0 %}
+            {% for listItem in item_list %}
+            <tr>
+                <td>{{ listItem.card }}</td>
+                <td>{{ listItem.price}}</td>
+                <td><a href="{{listItem.link}}" targer="_blank">{{listItem.link}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h2>Niestety, ta karta nie jest dostępna... Spróbuj ponownie później</h2>
+    {% endif %}
+
+</div>
+        {% endblock %}
