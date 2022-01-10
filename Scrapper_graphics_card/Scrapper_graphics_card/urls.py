@@ -12,6 +12,7 @@ from app import forms, views
 urlpatterns = [
     path('', views.home, name='home'),
     path('contact/', views.contact, name='contact'),
+    path('rtx3060/', views.rtx3060, name='rtx3060'),
     path('about/', views.about, name='about'),
     path('login/',
          LoginView.as_view

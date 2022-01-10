@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "239ab8ca-ff9a-4c3d-bab0-83080bbb2bb3": {
+      "ProjectGuid": "239ab8ca-ff9a-4c3d-bab0-83080bbb2bb3",
+      "DisplayName": "Scrapper_graphics_card",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

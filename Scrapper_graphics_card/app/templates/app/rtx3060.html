@@ -1,0 +1,20 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1>{{ title }}</h1>
+    
+</div>
+
+<div class="row">
+    {% for listItem in item_list %}
+    <div class="col-md-4">
+        <h2>{{ listItem.card }}</h2>
+        <h3>Cena: {{listItem.price }} zł</h3>
+        <p><a class="btn btn-default" href="{{listItem.link }}" target="_blank">Idź do okazji &raquo;</a></p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

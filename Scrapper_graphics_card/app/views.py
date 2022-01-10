@@ -5,9 +5,9 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from app.euro_spider import EuroGCSpider, start_scraper
 
 def home(request):
-    """Renders the home page."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -27,6 +27,20 @@ def contact(request):
         {
             'title':'Kontakt',
             'message':'',
+            'year':datetime.now().year,
+        }
+    )
+
+def rtx3060(request):
+
+    output = start_scraper("test")
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/rtx3060.html',
+        {
+            'item_list':output,
+            'title':'Nvidia RTX 3060',
             'year':datetime.now().year,
         }
     )
