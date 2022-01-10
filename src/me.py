@@ -2,7 +2,8 @@ import scrapy
 from html import unescape
 import unicodedata
 import time
-class EuroGCSpider(scrapy.Spider):
+
+class MeGCSpider(scrapy.Spider):
     name = 'cards'
     start_urls = [
         'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060.geforce-rtx-3060-ti',
