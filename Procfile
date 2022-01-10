@@ -1,1 +1,1 @@
-web: gunicorn myproject.wsgi
+web: gunicorn Scrapper_graphics_card.wsgi
