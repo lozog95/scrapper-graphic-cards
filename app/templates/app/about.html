@@ -3,7 +3,7 @@
 {% block content %}
 
 <h2>{{ title }}</h2>
-
+<h3>RTX Purchase Advisor</h3>
 <p>Aplikacja ma za zadanie odszukanie kart graficznych i wyświetlenie cen ich odpowiednich modeli</p>
 <p>
     Wraz z problemami w łańcuchu dostaw jak i brakami krzemu na świecie znalezienie obecnie oferty na różne komponenty komputerowe okazuje się nie lada wyzwaniem.
@@ -13,5 +13,20 @@
     Nie jest to jednak jedyny problem podczas kupowania tych komponentów. Sama cena odstrasza, ale nawet przy tak dużym narzucie ciężko jest znaleźć ofertę, która byłaby aktualna,
     a kartę możnaby było fizycznie zamówić. Aplikacja ta ma pomóc właśnie w takim przeszukiwaniu ofert.
 </p>
+<h3>Wykorzystane technologie</h3>
+<p>Do wykonania aplikacji wykorzystano scraper utworzony w języku Python przy użyciu biblioteki Scrapy</p>
+<p>Applikacja webowa została wykonana przy użyciu biblioteki Django</p>
+<p>Inne istotne biblioteki:</p>
+<ul>
+        <li>crochet</li>
+        <li>twisted</li>
+        <li>gunicorn</li>
+        <li>bootstrap</li>
+    
+</ul>
+<h3>Sposób działania aplikacji:</h3>
+<p>Po kliknięciu przycisku "Scrapuj" przy wybranym modelu karty graficznej uruchamiany jest scraper, który łączy się z trzema sklepami internetowymi - Media Expert, EuroRTV AGD, oraz Media Markt</p>
+<p>Scraper pobiera odmiany modelu kart graficznych, wraz z ich cenami, oraz bezpośrednimi linkami do ofert.</p>
+<p>Dane pobrane przez scraper zapisywane są w formacie JSON, a następnie odczytywane i wyświetlane na liście wyników</p>
 
 {% endblock %}
