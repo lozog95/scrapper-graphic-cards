@@ -15,14 +15,17 @@
     -moz-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
     box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
 }
-.aligned-row {
-    display: flex;
-    flex-flow: row wrap;
-  
-    &::before {
-      display: block;
-    }
-  }
+.row{
+    overflow: hidden; 
+}
+
+[class*="col-"]{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+.col-md-3 {
+    height: 100%;
+}
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
