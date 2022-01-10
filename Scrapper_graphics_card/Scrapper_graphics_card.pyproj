@@ -32,6 +32,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="app\mm_spider.py" />
+    <Compile Include="app\me_spider.py" />
     <Compile Include="app\euro_spider.py">
       <SubType>Code</SubType>
     </Compile>
