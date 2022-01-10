@@ -1,7 +1,7 @@
 import scrapy
 from html import unescape
 import unicodedata
-import time
+
 class EuroGCSpider(scrapy.Spider):
     name = 'cards'
     start_urls = [

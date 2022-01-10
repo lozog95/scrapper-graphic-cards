@@ -1,11 +1,11 @@
 import scrapy
 from html import unescape
 import unicodedata
-import time
-class EuroGCSpider(scrapy.Spider):
+
+class MMGCSpider(scrapy.Spider):
     name = 'cards'
     start_urls = [
-        'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060.geforce-rtx-3060-ti',
+        'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060-ti',
     ]
 
     def _cleanup_price(self, price):
@@ -24,11 +24,11 @@ class EuroGCSpider(scrapy.Spider):
 
     def parse(self, response):
         #
-        for card in response.css('#section_list-items > div > span'):
+        for card in response.css('div.offers.is-list > div.offer'):
             yield {
-                'price': self._cleanup_price(card.css('div > div.dynamic-content > div > div.price-box > div.prices-section > div > div > span::text').get()),
-                'card': self._cleanup_name(card.css('div.box > h2 > a::text').get()),
-                'link': "https://mediaexpert.pl"+card.css('a.spark-link::attr("href")').get()
+                'price': self._cleanup_price(card.css('div.tab.price > div > div > span::text').get()),
+                'card': self._cleanup_name(card.css('h2.title::text').get()),
+                'link': "https://mediamarkt.pl"+card.css('div.info > a.spark-link::attr("href")').get()
             }
         
 

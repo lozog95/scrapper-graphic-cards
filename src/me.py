@@ -1,7 +1,7 @@
 import scrapy
 from html import unescape
 import unicodedata
-import time
+
 
 class MeGCSpider(scrapy.Spider):
     name = 'cards'
