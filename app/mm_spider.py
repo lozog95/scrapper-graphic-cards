@@ -9,19 +9,30 @@ from twisted.internet import reactor
 import scrapy
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
-import crochet
+from scrapy.utils.project import get_project_settings
 
+import crochet
+from datetime import datetime
 class MMGCSpider(scrapy.Spider):
-    custom_settings = {
-        'FEED_FORMAT': 'json',
-        'FEED_URI': 'app/mm_output.json'
-    }
+    
+    # custom_settings = {
+    #     'FEED_FORMAT': 'json',
+    #     'FEED_URI': f"app/mm_{self.dt}_{self.model}.json"
+    #     }
     name = 'cards'
-    def __init__(self, *args, **kwargs): 
+    # custom_settings = {
+    #     'FEED_FORMAT': 'json',
+    #     'FEED_URI': f"app/mm_output.json"
+    #     }
+    def __init__(self, model, *args, **kwargs): 
       super(MMGCSpider, self).__init__(*args, **kwargs) 
       self.start_urls = [kwargs.get('start_url')]
-      print("URLEEEEE")
+      self.model=model
+
+      print("call do mm")
       print(self.start_urls)
+ 
+      
 
 
     def _cleanup_price(self, price):
@@ -54,13 +65,21 @@ class MMGCSpider(scrapy.Spider):
 
 
 
-def mm_start_scraper(given_url):
+def mm_start_scraper(given_url, model):
     
     #crochet used to run spider from script of non main thread
     crochet.setup()
-    
+    s = get_project_settings()
+    dt=datetime.now().strftime('%Y%m%d')
+
+    s.update({
+        'FEED_FORMAT': 'json',
+        'FEED_URI': f"app/mm_{dt}_{model}.json"
+    })
+    print(s)
     #running spider, arachnophobia alert (!)
-    runner = CrawlerRunner()
+    runner = CrawlerRunner(settings=s)
+    
     #d = runner.crawl(EuroGCSpider,start_url=given_url)
-    d = runner.crawl(MMGCSpider, start_url=given_url)
+    d = runner.crawl(MMGCSpider, start_url=given_url, model=model)
 

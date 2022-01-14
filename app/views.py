@@ -11,6 +11,7 @@ from app.mm_spider import mm_start_scraper
 from app.models import clean_json_files, json_reader, output_lists
 import time
 import os
+import app.utils as utils
 from django.http import HttpResponseRedirect
 
 
@@ -38,46 +39,86 @@ def contact(request):
         }
     )
 
+
 def rtx3060(request):
     #cleaning previous json file if it exist
-    clean_json_files()
+    #clean_json_files()
+    model="3060"
+    print(utils.lookup_file(model))
+    if os.path.exists(os.path.join("app", utils.lookup_file(model))):
+        return HttpResponseRedirect("/rtx3060/results")
+
     #static url for this specific card model
-    euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
-    me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
+    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
+    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
     mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060'
-    mm_start_scraper(mm_url)
-    me_start_scraper(me_url)
-    euro_start_scraper(euro_url)
-    #euro_start_scraper(given_url)
+    mm_start_scraper(mm_url,model)
+    print("po skraperze kawalerze")
+    #me_start_scraper(me_url, model)
+    #euro_start_scraper(euro_url, model)
+    
     while True:
         time.sleep(1)
-        if os.path.exists("app/mm_output.json"):
+        if os.path.exists(utils.lookup_file(model)):
             break
     return HttpResponseRedirect("/rtx3060/results")
 
     #assert isinstance(request, HttpRequest)
-    """return render(
-            request,
-            'app/choice_template.html',
-            {    
-                'title':'Nvidia RTX 3060',
-                'year':datetime.now().year,
-            }
-    )"""
+    # """return render(
+    #         request,
+    #         'app/choice_template.html',
+    #         {    
+    #             'title':'Nvidia RTX 3060',
+    #             'year':datetime.now().year,
+    #         }
+    # )"""
 
-def rtx3060ti(request):
-    clean_json_files()
-    euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060-ti.bhtml'
-    me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060-ti'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060-ti'
-    mm_start_scraper(mm_url)
-    #starting euro scraper with given URL
-    me_start_scraper(me_url)
-    euro_start_scraper(euro_url)
+def render_page(request, model):
+    
+   # print(utils.lookup_file(model))
+    if os.path.exists(os.path.join("app", utils.lookup_file(model))):
+        return HttpResponseRedirect(f"/rtx{model}/results")
+    if model=="3060ti":
+        site_model="3060-ti"
+    else:
+        site_model=model
+    #static url for this specific card model
+    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
+    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
+    
+    mm_url = f"https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-{site_model}"
+    mm_start_scraper(mm_url,model)
+    #me_start_scraper(me_url, model)
+    #euro_start_scraper(euro_url, model)
+    
     while True:
         time.sleep(1)
-        if os.path.exists("app/euro_output.json"):
+        if os.path.exists(os.path.join("app",utils.lookup_file(model, shop="mm"))):
             break
+    #time.sleep(1)
+    return HttpResponseRedirect(f"/rtx{model}/results")
+
+
+def rtx3060ti(request):
+    model="3060ti"
+   # print(utils.lookup_file(model))
+    if os.path.exists(os.path.join("app", utils.lookup_file(model))):
+        return HttpResponseRedirect("/rtx3060ti/results")
+
+    #static url for this specific card model
+    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
+    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
+    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060-ti'
+    mm_start_scraper(mm_url,model)
+    print("po skraperze kawalerze")
+    #me_start_scraper(me_url, model)
+    #euro_start_scraper(euro_url, model)
+    
+    while True:
+        time.sleep(1)
+        if os.path.exists(os.path.join("app",utils.lookup_file(model, shop="mm"))):
+            break
+    #time.sleep(1)
     return HttpResponseRedirect("/rtx3060ti/results")
 
 def rtx3070(request):
@@ -124,8 +165,8 @@ def rtx3090(request):
             break
     return HttpResponseRedirect("/rtx3090/results", )
 
-def result_page(request):
-    output = output_lists()
+def result_page(request, model):
+    output = output_lists(model)
     #print(output)
     #output.sort(key=lambda x: x['price'], reverse=False)
     assert isinstance(request, HttpRequest)
@@ -134,7 +175,7 @@ def result_page(request):
         'app/result_template.html',
         {
             'title': "Wyniki wyszukiwania",
-            'item_list':output,
+            'item_list':output["results"],
             'year':datetime.now().year,
         }
     )

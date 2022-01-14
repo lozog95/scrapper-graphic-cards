@@ -5,7 +5,7 @@ Definition of models.
 from django.db import models
 import json
 import os
-
+import app.utils as utils
 
 #json reader model to read output json files
 def json_reader(json_path):
@@ -25,16 +25,16 @@ def clean_json_files():
     if os.path.exists("app/mm_output.json"):
         os.remove("app/mm_output.json")
 
-def output_lists():
-    output_me = json_reader('me_output.json')
-    output_euro = json_reader('euro_output.json')
-    output_mm = json_reader('mm_output.json')
+def output_lists(model):
+    #output_me = json_reader(utils.lookup_file(model=model, shop="me"))
+    #output_euro = json_reader(utils.lookup_file(model=model, shop="euro"))
+    output_mm = json_reader(utils.lookup_file(model=model, shop="mm"))
     output = []
-    if output_me:
-        output= output + output_me
-    if output_euro:
-        output= output + output_euro
+    # if output_me:
+    #     output= output + output_me
+    # if output_euro:
+    #     output= output + output_euro
     if output_mm:
-        output = output + output_mm
-    output.sort(key=lambda x: int(x['price']), reverse=False)
-    return output
+        output=output+output_mm
+    #output.sort(key=lambda x: int(x['price']), reverse=False)
+    return utils.parse_json(output)
