@@ -12,7 +12,9 @@
     <h1>Wyniki wyszukiwania {{ name }}</h1>
 
 </div>
-<p><a class="btn btn-default" href="refresh">Odśwież dane &raquo;</a></p>
+<p><a class="btn btn-default" href="refresh">Odśwież dane &raquo;</a> 
+  <button class="btn btn-default" onclick="ShowAndHide()">Pokaż dane historyczne dla tego modelu &raquo;</button>
+</p>
 <div class="row">
     {% if item_list|length > 0 %}
     <table class="table">
@@ -42,36 +44,56 @@
     <h3> Średnia cena z dzisiaj: {{ average }} </h3>
     <br/>
 
-    {% if history_list|length > 0 %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Data</th>
-                <th scope="col">Średnia cena</th>
-            </tr>
-        </thead>
-        <tbody>
-    {% endif %}
-            {% if history_list|length > 0 %}
-            {% for listItem in history_list %}
-            <tr>
-                <td>{{ listItem.date }}</td>
-                <td>{{ listItem.price}}</td>
-            
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <h2>Niestety, ta karta nie jest dostępna... Spróbuj ponownie później</h2>
-    {% endif %}
+
 
 </div>
+
+{% if history_list|length > 1 %}
+<div id="history_table">
+  <h3> Średnia cena historyczna: {{ average_history }} </h3>
 <div id="container"></div>
+{% endif %}
+
+
+{% if history_list|length > 0 %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Średnia cena</th>
+        </tr>
+    </thead>
+    <tbody>
+{% endif %}
+        {% if history_list|length > 0 %}
+        {% for listItem in history_list %}
+        <tr>
+            <td>{{ listItem.date }}</td>
+            <td>{{ listItem.price}}</td>
+        
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<h2>Niestety, dane historyczne nie są dostępne dla tej karty... Spróbuj ponownie później</h2>
+</div>
+{% endif %}
+</div>
+
+
 <script type="text/javascript">
-    var one_yr = "{{ history_variable }}"
+var card_price = [
+  {% for item in history_list %}
+  {
+  'price': {{ item.price }},
+  'date': '{{item.date}}'
+},
+ {% endfor %}
+ ]
   
-  one_yr = one_yr.map(function(e) {
+  card_price = card_price.map(function(e) {
     return {
       'y': e.price,
       'x': new Date(e.date).getTime()
@@ -80,7 +102,7 @@
   
   Highcharts.chart('container', {
     title: {
-      text: 'AVG price'
+      text: 'Średnia cena'
     },
     xAxis: {
       type: 'datetime',
@@ -89,7 +111,18 @@
       }
     },
     series: [{
-      data: one_yr
+      data: card_price
     }]
   });</script>
+
+  <script>
+    function ShowAndHide() {
+  var x = document.getElementById("history_table");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+  </script>
         {% endblock %}

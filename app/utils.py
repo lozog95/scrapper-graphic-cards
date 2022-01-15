@@ -15,7 +15,7 @@ def average(products):
 # print(average(prod))
 def parse_json(output):
     td=datetime.datetime.now()
-    td=td.strftime("%d-%m-%Y")
+    td=td.strftime("%Y-%m-%d")
     output_all = {"results":[], "date":td}
     output_all["results"]+=output
     output_all["average"] = average(output_all["results"])
@@ -25,7 +25,7 @@ def parse_json(output):
 
 def format_json(json_file):
     td=datetime.datetime.now()
-    td=td.strftime("%d-%m-%Y")
+    td=td.strftime("%Y-%m-%d")
     output = {"results":[], "date":td}
 
     with open(json_file) as f:
@@ -58,5 +58,6 @@ def get_model_history(model):
         with open(a) as f:
             f_dict=ast.literal_eval(f.readlines()[0])
             model_history["prices"].append({"date":f_dict["date"], "price": f_dict["average"]})
+    model_history["average_price"] = average(model_history["prices"])
     return model_history
 #print(lookup_file(model="3050"))

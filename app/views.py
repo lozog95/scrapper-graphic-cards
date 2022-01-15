@@ -91,6 +91,7 @@ def result_page(request, model):
     #print(output)
     #output.sort(key=lambda x: x['price'], reverse=False)
     historical_data=utils.get_model_history(model)
+    
     return render(
         request,
         'app/result_template.html',
@@ -99,6 +100,7 @@ def result_page(request, model):
             'title': "Wyniki wyszukiwania",
             'item_list':output["results"],
             'history_list': historical_data["prices"],
+            'average_history': historical_data["average_price"],
             'year':datetime.now().year,
         }
     )
