@@ -7,14 +7,26 @@
 
 .btn-default {
 
-}  
+}
+
     */
+
+#history_table {
+    display: none;
+}
+
 .inner-div {
     padding: 5px 15px 5px 15px;  
     -webkit-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
     -moz-box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
     box-shadow: 1px 1px 8px -3px rgba(66, 68, 90, 1);
 }
+#container {
+    min-width: 310px;
+    max-width: 800px;
+    height: 400px;
+    margin: 0 auto
+  }
 
 .col-md-4 {
     margin-top: 15px
