@@ -60,4 +60,3 @@ def get_model_history(model):
             model_history["prices"].append({"date":f_dict["date"], "price": f_dict["average"]})
     return model_history
 #print(lookup_file(model="3050"))
-print(get_model_history("rtx3060ti"))
