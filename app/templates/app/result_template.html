@@ -2,9 +2,14 @@
 
 {% block content %}
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
 
@@ -13,7 +18,12 @@
 
 </div>
 <p><a class="btn btn-default" href="refresh">Odśwież dane &raquo;</a> 
-  <button class="btn btn-default" onclick="ShowAndHide()">Pokaż dane historyczne dla tego modelu &raquo;</button>
+  {% if history_list|length > 1 %}  
+    <button class="btn btn-default" onclick="ShowAndHide()">Pokaż dane historyczne dla tego modelu &raquo;</button>
+  {% else %}
+    <button title="Brak danych historycznych dla tego modelu" class="btn btn-default" disabled >Pokaż dane historyczne dla tego modelu &raquo;</button>
+  {% endif %} 
+
 </p>
 <div class="row">
     {% if item_list|length > 0 %}
@@ -42,15 +52,27 @@
     {% endif %}
 
     <h3> Średnia cena z dzisiaj: {{ average }} </h3>
-    <br/>
 
 
 
-</div>
+
+
 
 {% if history_list|length > 1 %}
 <div id="history_table">
   <h3> Średnia cena historyczna: {{ average_history }} </h3>
+  <h3>Porada do zakupu:</h3>
+    {% if advise|length > 0 %}
+      <p>{{ advise }}</p>
+    {% endif %} 
+  </h3>
+  <br>
+
+  <h4>Opłacalność zakupu (więcej = lepiej):</h4>
+  <div id="gauge_container" style="width: 400px; height: 300px; margin: 0 auto"></div>
+  
+
+
 <div id="container"></div>
 {% endif %}
 
@@ -111,7 +133,8 @@ var card_price = [
       }
     },
     series: [{
-      data: card_price
+      data: card_price,
+      name: "Cena"
     }]
   });</script>
 
@@ -124,5 +147,100 @@ var card_price = [
     x.style.display = "block";
   }
 }
+  </script>
+
+  <script>
+var gaugeOptions = {
+    chart: {
+        type: 'solidgauge'
+    },
+
+    title: null,
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        stops: [
+            [0.1, '#55BF3B'], // green
+            [0.5, '#DDDF0D'], // yellow
+            [0.9, '#DF5353'] // red
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        }
+    },
+
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
+    }
+};
+
+// The speed gauge
+var chartSpeed = Highcharts.chart('gauge_container', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 2,
+        title: {
+            //text: 'Opłacalność'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Opłacalność',
+        data: [{{ profitability }}],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}</span><br/>' +
+                '</div>'
+        },
+        tooltip: {
+            
+        }
+    }]
+
+}));
+
+
+
+
   </script>
         {% endblock %}

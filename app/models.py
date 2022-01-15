@@ -57,3 +57,25 @@ def output_lists(model):
         f.close()
     
     return output_all
+
+def advise_checker(profitability):
+    advise = None
+    if float(profitability) < 0.5:
+        advise = "Cena jest przynajmniej połowę wyższa niż zazwyczaj, nie kupuj obecnie karty"
+    elif float(profitability) < 0.7:
+        advise = "Cena jest znacznie wyższa niż wcześniej, wstrzymaj się z zakupem"
+    elif float(profitability) < 0.9:
+        advise = "Cena jest wyższa niż wcześniej, wstrzymaj się z zakupem"
+        print(advise)
+    elif float(profitability) < 1:
+        advise = "Cena jest nieznacznie wyższa niż wcześniej, jeśli możesz wstrzymaj się z zakupem aż spadnie"
+        print(advise)
+    elif float(profitability) < 1.1:
+        advise = "Cena jest niższa niż zazwyczaj, to może być dobra okazja"
+    elif float(profitability) < 1.2:
+        advise = "Cena jest znacząco niższa niż zazwyczaj, to może być dobra okazja"
+    elif float(profitability) < 1.3:
+        advise = "Cena jest niska, to dobry czas na kupno karty"
+    elif float(profitability) > 1.3:
+        advise = "Cena jest bardzo mała, kupuj teraz"
+    return advise

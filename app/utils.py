@@ -61,3 +61,5 @@ def get_model_history(model):
     model_history["average_price"] = average(model_history["prices"])
     return model_history
 #print(lookup_file(model="3050"))
+
+
