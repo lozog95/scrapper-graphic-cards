@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from app.euro_spider import euro_start_scraper
 from app.me_spider import me_start_scraper
 from app.mm_spider import mm_start_scraper
-from app.models import clean_json_files, json_reader, output_lists
+from app.models import clean_json_files, json_reader, output_lists, advise_checker
 import time
 import os
 import app.utils as utils
@@ -58,7 +58,7 @@ def render_page(request, model):
     if model=="rtx3060ti":
         site_model="3060-ti"
     else:
-        site_model= model[4:]
+        site_model= model[3:]
         print(site_model)
     #static url for this specific card model
     euro_url = f"https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-{site_model}.bhtml"
@@ -92,6 +92,14 @@ def result_page(request, model):
     #output.sort(key=lambda x: x['price'], reverse=False)
     historical_data=utils.get_model_history(model)
     historical_data["prices"].sort(key=lambda x: x['date'], reverse=False)
+    profitability = historical_data["average_price"] / output["average"]
+    profitability = str(round(profitability, 2))
+    advise = advise_checker(profitability)
+
+
+    output["average"] = str(round(output["average"],2))
+    historical_data["average_price"] = str(round(historical_data["average_price"], 2))
+
     return render(
         request,
         'app/result_template.html',
@@ -101,6 +109,8 @@ def result_page(request, model):
             'item_list':output["results"],
             'history_list': historical_data["prices"],
             'average_history': historical_data["average_price"],
+            'profitability': profitability,
+            'advise' : advise,
             'year':datetime.now().year,
         }
     )
