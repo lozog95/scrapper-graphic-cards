@@ -1,6 +1,7 @@
 import ast
 import datetime
 import os
+import glob
 
 def average(products):
     prices=[]
@@ -49,6 +50,14 @@ def lookup_file(model, shop=None):
         path=("%s_%s.json" % ( td, model))
     return path
     
-    
 
+def get_model_history(model):
+    available_files=glob.glob(f"app/????????_{model}.json")
+    model_history={"model": model, "prices": []}
+    for a in available_files:
+        with open(a) as f:
+            f_dict=ast.literal_eval(f.readlines()[0])
+            model_history["prices"].append({"date":f_dict["date"], "price": f_dict["average"]})
+    return model_history
 #print(lookup_file(model="3050"))
+print(get_model_history("rtx3060ti"))

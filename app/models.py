@@ -47,12 +47,13 @@ def output_lists(model):
     if output_mm:
         output=output+output_mm
     
-    #output.sort(key=lambda x: int(x['price']), reverse=False)
+    output.sort(key=lambda x: int(x['price']), reverse=False)
+    print(output)
     output_all = utils.parse_json(output)
     td=datetime.now()
     td=td.strftime("%Y%m%d")
     with open(f"app/{td}_{model}.json", "w") as f:
         f.write(json.dumps(output_all))
         f.close()
-
+    
     return output_all

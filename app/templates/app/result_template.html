@@ -33,6 +33,32 @@
     <h2>Niestety, ta karta nie jest dostępna... Spróbuj ponownie później</h2>
     {% endif %}
 
-    <h1> Średnia cena z dzisiaj: {{ average }} </h1>
+    <h3> Średnia cena z dzisiaj: {{ average }} </h3>
+    <br/>
+
+    {% if history_list|length > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Średnia cena</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% endif %}
+            {% if history_list|length > 0 %}
+            {% for listItem in history_list %}
+            <tr>
+                <td>{{ listItem.date }}</td>
+                <td>{{ listItem.price}}</td>
+            
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h2>Niestety, ta karta nie jest dostępna... Spróbuj ponownie później</h2>
+    {% endif %}
+
 </div>
         {% endblock %}
