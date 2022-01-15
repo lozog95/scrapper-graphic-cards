@@ -29,7 +29,7 @@ class MMGCSpider(scrapy.Spider):
       self.start_urls = [kwargs.get('start_url')]
       self.model=model
 
-      print("call do mm")
+      #print("call do mm")
       print(self.start_urls)
  
       
@@ -76,7 +76,7 @@ def mm_start_scraper(given_url, model):
         'FEED_FORMAT': 'json',
         'FEED_URI': f"app/mm_{dt}_{model}.json"
     })
-    print(s)
+    # print(s)
     #running spider, arachnophobia alert (!)
     runner = CrawlerRunner(settings=s)
     

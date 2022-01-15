@@ -13,10 +13,12 @@ import time
 import os
 import app.utils as utils
 from django.http import HttpResponseRedirect
+from django.urls import resolve
+import ast
+import json
 
 
 def home(request):
-    clean_json_files()
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -39,148 +41,71 @@ def contact(request):
         }
     )
 
-
-def rtx3060(request):
-    #cleaning previous json file if it exist
-    #clean_json_files()
-    model="3060"
-    print(utils.lookup_file(model))
-    if os.path.exists(os.path.join("app", utils.lookup_file(model))):
-        return HttpResponseRedirect("/rtx3060/results")
-
-    #static url for this specific card model
-    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
-    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060'
-    mm_start_scraper(mm_url,model)
-    print("po skraperze kawalerze")
-    #me_start_scraper(me_url, model)
-    #euro_start_scraper(euro_url, model)
-    
-    while True:
-        time.sleep(1)
-        if os.path.exists(utils.lookup_file(model)):
-            break
-    return HttpResponseRedirect("/rtx3060/results")
-
-    #assert isinstance(request, HttpRequest)
-    # """return render(
-    #         request,
-    #         'app/choice_template.html',
-    #         {    
-    #             'title':'Nvidia RTX 3060',
-    #             'year':datetime.now().year,
-    #         }
-    # )"""
+def refresh_page(request, model):
+    print("Model in refresh page")
+    print(model)
+    clean_json_files(model)
+    return HttpResponseRedirect(f"/result/{model}")
 
 def render_page(request, model):
-    
+
    # print(utils.lookup_file(model))
+    print("Model in render page is:")
+    print(model)
     if os.path.exists(os.path.join("app", utils.lookup_file(model))):
-        return HttpResponseRedirect(f"/rtx{model}/results")
-    if model=="3060ti":
+        print("JSON already exists")
+        return HttpResponseRedirect(f"/result/{model}/results")
+    if model=="rtx3060ti":
         site_model="3060-ti"
     else:
-        site_model=model
+        site_model= model[4:]
+        print(site_model)
     #static url for this specific card model
     #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
-    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
-    
+    me_url = f"https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-{site_model}"
     mm_url = f"https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-{site_model}"
+    print("Media mark url to be checked")
+    print(mm_url)
     mm_start_scraper(mm_url,model)
-    #me_start_scraper(me_url, model)
+    me_start_scraper(me_url, model)
     #euro_start_scraper(euro_url, model)
     
     while True:
         time.sleep(1)
-        if os.path.exists(os.path.join("app",utils.lookup_file(model, shop="mm"))):
+        if os.path.exists(os.path.join("app",utils.lookup_file(model, shop="me"))):
             break
     #time.sleep(1)
-    return HttpResponseRedirect(f"/rtx{model}/results")
-
-
-def rtx3060ti(request):
-    model="3060ti"
-   # print(utils.lookup_file(model))
-    if os.path.exists(os.path.join("app", utils.lookup_file(model))):
-        return HttpResponseRedirect("/rtx3060ti/results")
-
-    #static url for this specific card model
-    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
-    #me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3060'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3060-ti'
-    mm_start_scraper(mm_url,model)
-    print("po skraperze kawalerze")
-    #me_start_scraper(me_url, model)
-    #euro_start_scraper(euro_url, model)
-    
-    while True:
-        time.sleep(1)
-        if os.path.exists(os.path.join("app",utils.lookup_file(model, shop="mm"))):
-            break
-    #time.sleep(1)
-    return HttpResponseRedirect("/rtx3060ti/results")
-
-def rtx3070(request):
-    clean_json_files()
-    euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3070.bhtml'
-    me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3070'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3070'
-    mm_start_scraper(mm_url)
-    me_start_scraper(me_url)
-    euro_start_scraper(euro_url)
-    while True:
-        time.sleep(1)
-        if os.path.exists("app/euro_output.json"):
-            break
-    return HttpResponseRedirect("/rtx3070/results")
-
-def rtx3080(request):
-    clean_json_files()
-    euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3080.bhtml'
-    me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3080'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3080'
-    mm_start_scraper(mm_url)
-    me_start_scraper(me_url)
-    euro_start_scraper(euro_url)
-
-    while True:
-        time.sleep(1)
-        if os.path.exists("app/euro_output.json"):
-            break
-    return HttpResponseRedirect("/rtx3080/results")
-
-
-def rtx3090(request):
-    clean_json_files()
-    euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3090.bhtml'
-    me_url = 'https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-3090'
-    mm_url = 'https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-3090'
-    mm_start_scraper(mm_url)
-    me_start_scraper(me_url)
-    euro_start_scraper(euro_url)
-    while True:
-        time.sleep(1)
-        if os.path.exists("app/euro_output.json"):
-            break
-    return HttpResponseRedirect("/rtx3090/results", )
-
-def result_page(request, model):
     output = output_lists(model)
     #print(output)
     #output.sort(key=lambda x: x['price'], reverse=False)
-    assert isinstance(request, HttpRequest)
+
+    return HttpResponseRedirect(f"/result/{model}/results")
+
+def result_page(request, model):
+    global_path = os.path.join("app", utils.lookup_file(model))
+    if os.path.exists(global_path):
+        print("JSON already exists RESULTS PAGE")
+        output = json.loads(open(global_path).readlines()[0])
+    else:
+        output = output_lists(model)
+    #print(output)
+    #output.sort(key=lambda x: x['price'], reverse=False)
     return render(
         request,
         'app/result_template.html',
         {
+            'average':output["average"],
             'title': "Wyniki wyszukiwania",
             'item_list':output["results"],
             'year':datetime.now().year,
         }
     )
 
+
+
+
 def about(request):
+    
     """Renders the about page."""
     assert isinstance(request, HttpRequest)
     return render(

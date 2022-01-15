@@ -12,10 +12,18 @@ from app import forms, views
 urlpatterns = [
     path('', views.home, name='home'),
     path('contact/', views.contact, name='contact'),
-  
+    
+    path('result/<str:model>/refresh', views.refresh_page, name='model_render'),
 
-    path('<str:model>/', views.render_page, kwargs={'model': model}, name='model'),
-    path('<str:model>/results', views.result_page, kwargs={'model': "3060ti"} ,name='model'),
+    path('result/<str:model>/', views.render_page, name='model_render'),
+    path('result/<str:model>/results', views.result_page, name='model_results'),
+
+    # path('rtx3060/', views.render_page, kwargs={'model': 'rtx3060'}, name='rtx3060'),
+    # path('rtx3060/results', views.result_page, kwargs={'model': 'rtx3060'}, name='rtx3060'),
+
+    # path('rtx3060ti/', views.render_page, kwargs={'model': 'rtx3060ti'}, name='rtx3060ti'),
+    # path('rtx3060ti/results', views.result_page, kwargs={'model': 'rtx3060ti'}, name='rtx3060ti'),
+
 
 
     # path('rtx3060ti/', views.rtx3060ti, name='rtx3060ti'),
