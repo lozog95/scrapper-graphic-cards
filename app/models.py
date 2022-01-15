@@ -36,14 +36,14 @@ def clean_json_files(model):
         os.remove(f"app/mm_{td}_{model}.json")
 
 def output_lists(model):
-    #output_euro = json_reader(utils.lookup_file(model=model, shop="euro"))
+    output_euro = json_reader(utils.lookup_file(model=model, shop="euro"))
     output_me = json_reader(utils.lookup_file(model=model, shop="me"))
     output_mm = json_reader(utils.lookup_file(model=model, shop="mm"))
     output = []
     if output_me:
         output= output + output_me
-    # if output_euro:
-    #     output= output + output_euro
+    if output_euro:
+        output= output + output_euro
     if output_mm:
         output=output+output_mm
     

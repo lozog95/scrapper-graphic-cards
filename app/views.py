@@ -61,14 +61,14 @@ def render_page(request, model):
         site_model= model[4:]
         print(site_model)
     #static url for this specific card model
-    #euro_url = 'https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-3060.bhtml'
+    euro_url = f"https://www.euro.com.pl/karty-graficzne,typ-chipsetu!geforce-rtx-{site_model}.bhtml"
     me_url = f"https://www.mediaexpert.pl/komputery-i-tablety/podzespoly-komputerowe/karty-graficzne/geforce-rtx_tak/model_geforce-rtx-{site_model}"
     mm_url = f"https://mediamarkt.pl/komputery-i-tablety/akcesoria-komputerowe/czesci-komputerowe/karty-graficzne./uklad-graficzny=geforce-rtx-{site_model}"
     print("Media mark url to be checked")
     print(mm_url)
     mm_start_scraper(mm_url,model)
     me_start_scraper(me_url, model)
-    #euro_start_scraper(euro_url, model)
+    euro_start_scraper(euro_url, model)
     
     while True:
         time.sleep(1)
@@ -91,7 +91,7 @@ def result_page(request, model):
     #print(output)
     #output.sort(key=lambda x: x['price'], reverse=False)
     historical_data=utils.get_model_history(model)
-    
+    historical_data["prices"].sort(key=lambda x: x['date'], reverse=False)
     return render(
         request,
         'app/result_template.html',
